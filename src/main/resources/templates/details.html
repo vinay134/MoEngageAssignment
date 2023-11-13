@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <title>Profile Page</title>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .profile-container {
+            max-width: 600px;
+            margin: auto;
+            margin-top: 50px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        .profile-details {
+            margin-bottom: 20px;
+        }
+
+        .profile-description {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        .rating-container {
+            max-width: 400px;
+            margin: auto;
+            margin-top: 50px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .rating-stars i {
+            font-size: 24px;
+            color: #ddd;
+            cursor: pointer;
+        }
+
+        .rating-stars i:hover,
+        .rating-stars i.active {
+            color: #f8d504;
+        }
+    </style>
+</head>
+
+<body>
+<div class="fluid-container">
+    <div class="profile-container">
+        <div class="row">
+            <div class="col-6">
+                <div class="profile-details">
+                    <h2 th:text="${brewery.breweryName}"></h2>
+                    <p th:text="'Address : '+${brewery.breweryAddress}"></p>
+                    <p th:text="'phoneNumber :'+${brewery.phoneNumber}"></p>
+                    <!--<p th:text="'webSiteUrl : '+${brewery.websiteUrl}"></p>-->
+                    <p th:text="'state : '+${brewery.state}"></p>
+                </div>
+                <h2>Add Your Rating</h2>
+                <form id="ratingForm" th:action="@{/submit-rating}" method="post">
+                    <div class="form-group">
+                        <div class="rating-stars">
+                            <i class="fas fa-star" data-value="1" onclick="updateRating(1)"></i>
+                            <i class="fas fa-star" data-value="2" onclick="updateRating(2)"></i>
+                            <i class="fas fa-star" data-value="3" onclick="updateRating(3)"></i>
+                            <i class="fas fa-star" data-value="4" onclick="updateRating(4)"></i>
+                        </div>
+                        <input type="hidden"  id="rating" value="0" name="ratingVal">
+                        <input type="hidden" name="breweryId" th:value="${brewery.id}">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit Rating</button>
+                </form>
+            </div>
+            <div class="col-6">
+                <div class="profile-details">
+                    <div class="card" style="width: 18rem;" th:each="rating:${ratings}">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${rating.user.userName}"></h5>
+                            <h6 class="card-subtitle mb-2 text-muted" th:text="'Rating: '+${rating.ratingValue}">4</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    function updateRating(value) {
+        const ratingInput = document.getElementById('rating');
+        ratingInput.value = value;
+
+        // Remove 'active' class from all stars
+        const stars = document.querySelectorAll('.rating-stars i');
+        stars.forEach(star => star.classList.remove('active'));
+
+        // Add 'active' class to the clicked star and all previous stars
+        for (let i = 0; i < value; i++) {
+            stars[i].classList.add('active');
+        }
+    }
+</script>
+</body>
+
+</html>

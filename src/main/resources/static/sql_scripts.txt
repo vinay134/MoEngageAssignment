@@ -1,0 +1,17 @@
+create database brewery_db;
+
+use brewery_db;
+
+create table users(
+	id int primary key auto_increment,
+    user_name text,
+    password text
+);
+
+create table rating(
+    id int primary key auto_increment,
+    brewery_id text,
+    rating_value varchar(40),
+    user_id int,
+    foreign key(user_id) references users(id)
+);
